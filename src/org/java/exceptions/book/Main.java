@@ -1,8 +1,15 @@
 package org.java.exceptions.book;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
+	
+	static final File booksFile = new File("F:/eclipse-workspace/java-exceptions-books/books.txt");
+
+	
 	public static void main(String[] args) {
 		Scanner in = new Scanner(System.in);
 
@@ -40,12 +47,46 @@ public class Main {
 			
 			System.out.println("-----------------------------------");
 		}
-
-		for (int i = 0; i < books.length; i++) {
-			System.out.println("-----------------------------------");
-			System.out.println(books[i].toString());
-			System.out.println("-----------------------------------");
+		
+		// FILE WRITING	
+		FileWriter writer = null;
+		
+		try {
+			writer = new FileWriter(booksFile);
+			
+			for (int i = 0; i < books.length; i++) {
+				writer.write(books[i].toString() + "\n");
+				writer.write("-----------------------------------\n");
+			}
+			
+			
+		} catch (Exception e) {
+			System.err.println("Error reading file: " + e.getMessage());
+		} finally {
+			
+			if (writer != null)
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.getMessage();
+				}
 		}
-
+		
+		// FILE READING
+		Scanner reader = null;
+		try {
+			reader = new Scanner(booksFile);
+			
+			while (reader.hasNextLine()) {
+				String data = reader.nextLine();
+				System.out.println(data);
+			}
+		} catch (Exception e) {
+			e.getMessage();
+		} finally {
+			
+			if (reader != null)
+				reader.close();
+		}
 	}
 }
